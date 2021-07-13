@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
 public class Drive extends OpMode {
@@ -17,12 +18,15 @@ public class Drive extends OpMode {
         backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeft");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRight");
         backRightMotor = hardwareMap.get(DcMotorEx.class, "backRight");
+
+        frontLeftMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
     @Override
     public void loop() {
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = gamepad1.left_stick_x * 1.5; // Counteract imperfect strafing
+        double x = gamepad1.left_stick_x; // Counteract imperfect strafing
         double rx = gamepad1.right_stick_x;
 
         double frontLeftPower = y + x + rx;
@@ -33,7 +37,7 @@ public class Drive extends OpMode {
         if (Math.abs(frontLeftPower) > 1 || Math.abs(backLeftPower) > 1 ||
                 Math.abs(frontRightPower) > 1 || Math.abs(backRightPower) > 1 ) {
             // Find the largest power
-            double max = 0;
+            double max;
             max = Math.max(Math.abs(frontLeftPower), Math.abs(backLeftPower));
             max = Math.max(Math.abs(frontRightPower), max);
             max = Math.max(Math.abs(backRightPower), max);
