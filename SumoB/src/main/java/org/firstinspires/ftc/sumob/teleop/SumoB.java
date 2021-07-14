@@ -4,18 +4,25 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
 @TeleOp(name = "Sumo B")
 public class SumoB extends OpMode {
+    public static double LIFT_SERVO_HIGH = 1;
+    public static double LIFT_SERVO_LOW = 0;
+    public static double LIFT_SERVO_UP = 0.5;
+    public static double LIFT_SERVO_DOWN = 0.25;
+
     private DcMotorEx frontLeftMotor;
     private DcMotorEx backLeftMotor;
     private DcMotorEx frontRightMotor;
     private DcMotorEx backRightMotor;
 
     private Servo liftServo;
+
+    private boolean liftState = false;
+    private boolean previousLiftButton = false;
 
     @Override
     public void init() {
@@ -37,6 +44,8 @@ public class SumoB extends OpMode {
         backRightMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         liftServo.setDirection(Servo.Direction.FORWARD);
+
+        liftServo.setPosition(LIFT_SERVO_HIGH);
     }
 
     @Override
@@ -70,5 +79,20 @@ public class SumoB extends OpMode {
         backLeftMotor.setPower(backLeftPower);
         frontRightMotor.setPower(frontRightPower);
         backRightMotor.setPower(backRightPower);
+
+        boolean liftButton = gamepad1.a;
+        if (liftButton != previousLiftButton) {
+            if (liftButton) {
+                liftState = !liftState;
+            }
+
+            previousLiftButton = liftButton;
+        }
+
+        if (liftState) {
+            liftServo.setPosition(LIFT_SERVO_UP);
+        } else {
+            liftServo.setPosition(LIFT_SERVO_DOWN);
+        }
     }
 }
