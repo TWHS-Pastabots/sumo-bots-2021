@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
 @TeleOp(name = "Sumo B")
@@ -13,6 +14,8 @@ public class SumoB extends OpMode {
     private DcMotorEx frontRightMotor;
     private DcMotorEx backRightMotor;
 
+    private Servo liftServo;
+
     @Override
     public void init() {
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -20,8 +23,12 @@ public class SumoB extends OpMode {
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRight");
         backRightMotor = hardwareMap.get(DcMotorEx.class, "backRight");
 
+        liftServo = hardwareMap.get(Servo.class, "liftServo");
+
         frontLeftMotor.setDirection(DcMotorEx.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorEx.Direction.REVERSE);
+
+        liftServo.setDirection(Servo.Direction.FORWARD);
     }
 
     @Override
